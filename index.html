@@ -1,154 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" ></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js" ></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js" ></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js"></script>
 </head>
+
 <body>
-
     <div ng-app="goldPriceCalc" ng-controller="goldPriceCalcController">
-  <form class="form" action="">
-    <div class="col-md-12 row">
-      <div class="col-md-6 row">
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <a class="navbar-brand" href="#">Buy Gold</a>
 
-        <div class="col-md-6">
-          <label for=""><strong>Buy:</strong></label>
-          <div class="">
-            <label for="" class="control-label"> Gram Price</label>
-            <div class="form-group">
-              <input type="number" ng-change="calctotal()" class="form-control input-sm" ng-model="gramprice" />
+            <!-- Links -->
+            <!--<ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link 1</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link 2</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link 3</a>
+    </li>
+  </ul>
+-->
+        </nav>
+        <br />
+        <form class="form" action="">
+            <div class="col-md-12 row">
+                <div class="col-md-6 row">
+                    <div class="col-md-6">
+                        <label for=""><strong>Buy:</strong></label>
+                        <div class="">
+                            <label for="" class="control-label"> Gram Price</label>
+                            <div class="form-group">
+                                <input type="number" ng-change="calctotal()" class="form-control input-sm"
+                                    ng-model="gramprice" />
+                            </div>
+                        </div>
+                        <div class="">
+                            <label for="" class="control-label"> No. of Grams</label>
+                            <div class="form-group">
+                                <input type="number" ng-change="calctotal()" class="form-control input-sm"
+                                    ng-model="noofGrams" />
+                            </div>
+                        </div>
+                        <div class="">
+                            <label for="" class="control-label">Percentage</label>
+                            <div class="form-group">
+                                <input type="number" ng-change="calctotal()" class="form-control input-sm"
+                                    ng-model="percentage" />
+                            </div>
+                        </div>
+                        <div class="">
+                            <label for="" class="control-label">Total Amount</label>
+                            <div class="form-group">
+                                <input type="number" class="form-control input-sm" ng-model="totalamt" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for=""><strong>Sell:</strong></label>
+                        <div class="">
+                            <label for="" class="control-label">Selling Price for Gram </label>
+                            <div class="form-group">
+                                <input type="number" ng-change="calctotal()" class="form-control input-sm"
+                                    ng-model="sellingpriceforgram" />
+                            </div>
+                        </div>
+                        <div class="">
+                            <label for="" class="control-label"> No. of Grams</label>
+                            <div class="form-group">
+                                <input type="number" ng-change="calctotal()" class="form-control input-sm"
+                                    ng-model="noofGramsselling" />
+                            </div>
+                        </div>
+                        <div class="">
+                            <label for="" class="control-label">Total Amount</label>
+                            <div class="form-group">
+                                <input type="number" class="form-control input-sm" ng-model="totalamtofselling" />
+                            </div>
+                        </div>
+                        <div class="">
+                            <label class="control-label"></label>
+                            <div class="form-group">
+                                <input type="checkbox" ng-change="calctotal()" ng-model="iamselling"
+                                    class="form-check-input" value="yes">I'm Selling
+                            </div>
+                        </div>
+                        <div class="">
+                            <label for="" class="control-label">
+                                <div class="row">
+                                    <h4>Total Price. = </h4>
+                                    <h2 class="badge-success">{{totalamt}}</h2>
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="">
-            <label for="" class="control-label"> No. of Grams</label>
-            <div class="form-group">
-              <input type="number" ng-change="calctotal()" class="form-control input-sm" ng-model="noofGrams" />
+            <div class="col-md-6">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <tr class="thead-dark">
+                            <th>Gram Price</th>
+                            <th>Percentage</th>
+                            <th>Percentage * Gram Prize</th>
+                            <th>Total Amount</th>
+                        </tr>
+                        <tr ng-repeat="x in getNumber(percentage)">
+                            <td>{{gramprice}}</td>
+                            <td>{{x}} % </td>
+                            <td>{{ (noofGrams*gramprice) * (x/100)}}</td>
+                            <td>{{ getTotalAmount(x,noofGrams,gramprice,totalamt)}}</td>
+                        </tr>
+                        <tr ng-if="percentage==0 || percentage < 0 || percentage == null">
+                            <td colspan="4" class="text-lg-center"> No Records Found!...</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-          </div>
-          <div class="">
-            <label for="" class="control-label">Percentage</label>
-            <div class="form-group">
-              <input type="number" ng-change="calctotal()" class="form-control input-sm" ng-model="percentage" />
-            </div>
-          </div>
-          <div class="">
-            <label for="" class="control-label">Total Amount</label>
-            <div class="form-group">
-              <input type="number" class="form-control input-sm" ng-model="totalamt" />
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <label for=""><strong>Sell:</strong></label>
-          <div class="">
-            <label for="" class="control-label">Selling Price for Gram </label>
-            <div class="form-group">
-              <input type="number" ng-change="calctotal()" class="form-control input-sm" ng-model="sellingpriceforgram" />
-            </div>
-          </div>
-          <div class="">
-            <label for="" class="control-label"> No. of Grams</label>
-            <div class="form-group">
-              <input type="number" ng-change="calctotal()" class="form-control input-sm" ng-model="noofGramsselling" />
-            </div>
-          </div>
-
-          
-          <div class="">
-            <label for="" class="control-label">Total Amount</label>
-            <div class="form-group">
-              <input type="number" class="form-control input-sm" ng-model="totalamtofselling" />
-            </div>
-          </div>
-          <div class="">
-            <label class="control-label"></label>
-              <div class="form-group">
-                <input type="checkbox" ng-change="calctotal()" ng-model="iamselling"  class="form-check-input" value="yes">I'm Selling
-              </div>
-          </div>
-        </div>
-
-      </div>
-      <div class="col-md-6">
-        <table class="table table-bordered">
-          <tr>
-            <th>Gram Price</th>
-            <th>Percentage</th>
-            <th>Percentage * Gram Prize</th>
-            <th>Total Amount</th>
-          </tr>
-          <tr ng-repeat="x in getNumber(percentage)">
-            <td>{{gramprice}}</td>
-            <td>{{x}} % </td>
-
-            <td>{{ (noofGrams*gramprice) * (x/100)}}</td>
-            <td>{{ getTotalAmount(x,noofGrams,gramprice,totalamt)}}</td>
-          </tr>
-        </table>
-      </div>
     </div>
-  </form>
-</div>
+    </form>
+    </div>
     <script>
-var app = angular.module("goldPriceCalc", []);
-app.controller("goldPriceCalcController", ($scope) => {
-  $scope.test = "kalaiselvan";
-  $scope.gramprice = 4670;
-  $scope.noofGrams = 4;
-  $scope.percentage = 11;
-  $scope.iamselling=true;
-  
-  $scope.noofGramsselling=2;
-  $scope.sellingpriceforgram=$scope.gramprice;
-  $scope.totalamtofselling=0;
-  
-  $scope.cal = $scope.gramprice * $scope.noofGrams;
-  $scope.per = $scope.percentage / 100;
-  $scope.totalamt = $scope.cal + $scope.cal * $scope.per;
-  $scope.getNumber = (num) => {
-    var arr = [];
-    if (num != 0 && num > 0) {
-      for (var i = 1; i <= num; i++) {
-        arr.push(i);
-      }
-    }
-    return arr;
-  };
+        var app = angular.module("goldPriceCalc", []);
+        app.controller("goldPriceCalcController", ($scope) => {
+            $scope.gramprice = 4670;
+            $scope.noofGrams = 4;
+            $scope.percentage = 11;
+            $scope.iamselling = true;
 
-  $scope.getTotalAmount = (percentage, noofgrams, gramprice, totalamt) => {
-    var tot = 0;
-    tot = noofgrams * gramprice * (percentage / 100) + noofgrams * gramprice;
-    
-    if($scope.iamselling){
-       tot = (noofgrams * gramprice * (percentage / 100) + noofgrams * gramprice) -$scope.totalamtofselling;
-    }
-    else{
-      tot = noofgrams * gramprice * (percentage / 100) + noofgrams * gramprice;
-    }
-    return tot;
-  };
-  $scope.calctotal = () => {
-    $scope.cal = $scope.gramprice * $scope.noofGrams;
-    $scope.per = $scope.percentage / 100;
-    
-    $scope.totalamtofselling=$scope.sellingpriceforgram*$scope.noofGramsselling;
- 
-    if($scope.iamselling){
-      $scope.totalamt = ($scope.cal + $scope.cal * $scope.per) -$scope.totalamtofselling;
-    }
-    else{
-      $scope.totalamt = ($scope.cal + $scope.cal * $scope.per)
-    }
-  };
-  $scope.calctotal();
-});
+            $scope.noofGramsselling = 2;
+            $scope.sellingpriceforgram = $scope.gramprice;
+            $scope.totalamtofselling = 0;
+
+            $scope.cal = $scope.gramprice * $scope.noofGrams;
+            $scope.per = $scope.percentage / 100;
+            $scope.totalamt = $scope.cal + $scope.cal * $scope.per;
+            $scope.getNumber = (num) => {
+                var arr = [];
+                if (num != 0 && num > 0) {
+                    for (var i = 1; i <= num; i++) {
+                        arr.push(i);
+                    }
+                }
+                return arr;
+            };
+
+            $scope.getTotalAmount = (percentage, noofgrams, gramprice, totalamt) => {
+                var tot = 0;
+                tot = noofgrams * gramprice * (percentage / 100) + noofgrams * gramprice;
+                if ($scope.iamselling) {
+                    tot = (noofgrams * gramprice * (percentage / 100) + noofgrams * gramprice) - $scope.totalamtofselling;
+                }
+                else {
+                    tot = noofgrams * gramprice * (percentage / 100) + noofgrams * gramprice;
+                }
+                return tot;
+            };
+            $scope.calctotal = () => {
+                $scope.cal = $scope.gramprice * $scope.noofGrams;
+                $scope.per = $scope.percentage / 100;
+
+                $scope.totalamtofselling = $scope.sellingpriceforgram * $scope.noofGramsselling;
+
+                if ($scope.iamselling) {
+                    $scope.totalamt = ($scope.cal + $scope.cal * $scope.per) - $scope.totalamtofselling;
+                }
+                else {
+                    $scope.totalamt = ($scope.cal + $scope.cal * $scope.per)
+                }
+            };
+            $scope.calctotal();
+        });
     </script>
-
 </body>
+
 </html>
