@@ -97,7 +97,7 @@
                             <label for="" class="control-label">
                                 <div class="row">
                                     <h4>Total Price. = </h4>
-                                    <h2 class="badge-success">{{totalamt}}</h2>
+                                    <h2 class="badge-success">{{finalprice}}</h2>
                             </label>
                         </div>
                     </div>
@@ -135,10 +135,12 @@
             $scope.percentage = 11;
             $scope.iamselling = true;
 
+
             $scope.noofGramsselling = 2;
             $scope.sellingpriceforgram = $scope.gramprice;
             $scope.totalamtofselling = 0;
 
+            $scope.finalprice=0;
             $scope.cal = $scope.gramprice * $scope.noofGrams;
             $scope.per = $scope.percentage / 100;
             $scope.totalamt = $scope.cal + $scope.cal * $scope.per;
@@ -156,10 +158,10 @@
                 var tot = 0;
                 tot = noofgrams * gramprice * (percentage / 100) + noofgrams * gramprice;
                 if ($scope.iamselling) {
-                    tot = (noofgrams * gramprice * (percentage / 100) + noofgrams * gramprice) - $scope.totalamtofselling;
+                    $scope.finalprice = (noofgrams * gramprice * (percentage / 100) + noofgrams * gramprice) - $scope.totalamtofselling;
                 }
                 else {
-                    tot = noofgrams * gramprice * (percentage / 100) + noofgrams * gramprice;
+                    $scope.finalprice = noofgrams * gramprice * (percentage / 100) + noofgrams * gramprice;
                 }
                 return tot;
             };
@@ -168,12 +170,13 @@
                 $scope.per = $scope.percentage / 100;
 
                 $scope.totalamtofselling = $scope.sellingpriceforgram * $scope.noofGramsselling;
-
+                $scope.totalamt = ($scope.cal + $scope.cal * $scope.per)
                 if ($scope.iamselling) {
-                    $scope.totalamt = ($scope.cal + $scope.cal * $scope.per) - $scope.totalamtofselling;
+                    $scope.finalprice = ($scope.cal + $scope.cal * $scope.per) - $scope.totalamtofselling;
                 }
                 else {
-                    $scope.totalamt = ($scope.cal + $scope.cal * $scope.per)
+                    $scope.finalprice = ($scope.cal + $scope.cal * $scope.per)
+                    
                 }
             };
             $scope.calctotal();
