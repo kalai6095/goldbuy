@@ -1,0 +1,16 @@
+
+# 
+# pattern:
+# 
+# file/directory.               user
+
+
+*.js                            @kalai6095
+
+
+*.md                            @kalai6095
+
+*.json                          @kalai6095
+
+.*                              @kalai6095
+public/*.html                   @kalai6095
